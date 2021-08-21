@@ -67,3 +67,49 @@ def Merge(C, D):
 print(MergeSort(tosort))
 
 
+#COUNTING INVERSIONS IN AN ARRAY (basics of collaborative filtering)
+#returns number of inversions in an array and the corresponding sorted array
+
+#recursive call to make it run in O(nlog(n))
+def SortCountInv(array):
+    if len(array) == 0 or len(array) == 1:
+        return (array, 0)
+    else:
+        first_half = array[:int(len(array)/2)]
+        second_half = array[int(len(array)/2):]
+
+        (C, leftInv) = SortCountInv(first_half)
+        (D, rightInv) = SortCountInv(second_half)
+        (B, splitInv) = MergeCountSplitInv(C, D)
+
+        return(B, leftInv + rightInv + splitInv)
+
+def MergeCountSplitInv(X, Y):
+    i = 0
+    j = 0
+    output = [] #sorted array
+    numSplitInv = 0
+    for k in range(len(X) + len(Y)):
+        if X[i] < Y[j]:
+            output.append(X[i])
+            if len(X[i:]) == 1:
+                output = output + Y[j:]
+                return (output, numSplitInv)
+            else:
+                i += 1
+        else:
+            output.append(Y[j])
+            numSplitInv += len(X[i:])
+            if len(Y[j:]) == 1:
+                output = output + X[i:]
+                return (output, numSplitInv)
+            else:
+                j += 1
+    return (output, numSplitInv)
+
+#test array from book, should have 3 inversions
+test_array = [1, 3, 5, 2, 4, 6]
+
+#print(SortCountInv(test_array))
+
+
