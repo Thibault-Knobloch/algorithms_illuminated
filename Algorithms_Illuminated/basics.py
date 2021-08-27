@@ -19,8 +19,8 @@ def RecIntMult(x, y):
 
         return 10**(len(sx)) * ac + 10**(int(len(sx)/2))*(ad + bc) + bd
 
-print(RecIntMult(1234, 5678))
-print(1234*5678)
+#print(RecIntMult(1234, 5678))
+#print(1234*5678)
 
 #to make this RecIntMult better, make cases for uneven length (add leading zeros)
 #and make cases for unequal length of the inputs
@@ -64,7 +64,7 @@ def Merge(C, D):
     return output
 
 
-print(MergeSort(tosort))
+#print(MergeSort(tosort))
 
 
 #COUNTING INVERSIONS IN AN ARRAY (basics of collaborative filtering)
@@ -111,5 +111,51 @@ def MergeCountSplitInv(X, Y):
 test_array = [1, 3, 5, 2, 4, 6]
 
 #print(SortCountInv(test_array))
+
+
+# QUICKSORT Algorithm implementation
+
+def QuickSort(array, l, r):
+    if l >= r:
+        return array
+    
+    i = ChoosePivot(array, l, r)
+    array[l], array[i] = array[i], array[l]
+
+    j = Partition(array, l, r)
+
+    QuickSort(array, l, j - 1)
+    QuickSort(array, j + 1, r)
+    
+    return array
+
+def Partition(array, l, r):
+    p = array[l]
+    i = l + 1
+    j = l + 1
+    
+    for j in range(r):
+        if j < l + 1:
+            continue
+        if array[j] < p:
+            array[i], array[j] = array[j], array[i]
+            i += 1
+            print(i, j)
+    
+    array[l], array[i - 1] = array[i - 1], array[l]
+
+    return i - 1
+
+def ChoosePivot(array, l, r):
+    return l
+
+
+arr = [12, 14, 3, 8, 2, 5, 1, 4, 17, 23, 7, 6, 15]
+print(QuickSort(arr, 0, len(arr)))
+
+
+
+    
+
 
 
