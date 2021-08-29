@@ -116,43 +116,61 @@ test_array = [1, 3, 5, 2, 4, 6]
 # QUICKSORT Algorithm implementation
 
 def QuickSort(array, l, r):
+    print(array)
+    
     if l >= r:
         return array
     
-    i = ChoosePivot(array, l, r)
+    i = ChoosePivotRandom(array, l, r)
     array[l], array[i] = array[i], array[l]
 
     j = Partition(array, l, r)
 
-    QuickSort(array, l, j - 1)
-    QuickSort(array, j + 1, r)
+    QuickSort(array, l, j-1)
+    QuickSort(array, j+1, r)
     
     return array
 
 def Partition(array, l, r):
     p = array[l]
+    
     i = l + 1
     j = l + 1
     
-    for j in range(r):
+    for j in range(r + 1):
         if j < l + 1:
             continue
         if array[j] < p:
             array[i], array[j] = array[j], array[i]
             i += 1
-            print(i, j)
     
     array[l], array[i - 1] = array[i - 1], array[l]
-
+    
     return i - 1
 
-def ChoosePivot(array, l, r):
+def ChoosePivotFirst(array, l, r):#18 calls of QuickSort for example arr
     return l
 
+def ChoosePivotLast(array, l, r):#18 calls to QuickSort for example arr
+    return r
+
+
+def ChoosePivotMedian(array, l, r):# 20 calls to QuickSort for example array
+    length = len(array[l:r])
+    
+    return l + int(length // 2)
+
+import random
+
+def ChoosePivotRandom(array, l, r): #18-20 calls to QuickSort for example array
+    rand = random.randint(l,r)
+
+    return rand
+    
 
 arr = [12, 14, 3, 8, 2, 5, 1, 4, 17, 23, 7, 6, 15]
-print(QuickSort(arr, 0, len(arr)))
 
+print(QuickSort(arr, 0, (len(arr) - 1)))
 
 
     
