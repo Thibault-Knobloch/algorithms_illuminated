@@ -116,15 +116,13 @@ test_array = [1, 3, 5, 2, 4, 6]
 # QUICKSORT Algorithm implementation
 
 def QuickSort(array, l, r):
-    print(array)
-    
     if l >= r:
         return array
     
     i = ChoosePivotRandom(array, l, r)
     array[l], array[i] = array[i], array[l]
 
-    j = Partition(array, l, r)
+    j = Partition(array, l, r + 1)
 
     QuickSort(array, l, j-1)
     QuickSort(array, j+1, r)
@@ -133,11 +131,13 @@ def QuickSort(array, l, r):
 
 def Partition(array, l, r):
     p = array[l]
+
+    #print("pivot ", p)
     
     i = l + 1
     j = l + 1
     
-    for j in range(r + 1):
+    for j in range(r):
         if j < l + 1:
             continue
         if array[j] < p:
@@ -170,10 +170,39 @@ def ChoosePivotRandom(array, l, r): #18-20 calls to QuickSort for example array
 
 arr = [12, 14, 3, 8, 2, 5, 1, 4, 17, 23, 7, 6, 15]
 
-print(QuickSort(arr, 0, (len(arr) - 1)))
+sorted_arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+#print(QuickSort(arr, 0, (len(arr) - 1)))
 
 
+# RSELECT Randomized algorithm for linear time selection
+
+def RSelect(array, i):
+    length = len(array)
+
+    if (length < i): #order statistic cannot be in array
+        return None
+
+    if length == 1:
+        return array[0]
     
+    rand = random.randint(0, length - 1)
+
+    array[0], array[rand] = array[rand], array[0] #need to pass the pivot as first element of array to partition function
+    j = Partition(array, 0, length) #reuse partition function from QuickSort
+    
+    p = array[j]
+
+    if (j + 1) == i:
+        return p
+    elif (j + 1) > i:
+        return RSelect(array[0:j], i)
+    else:
+        return RSelect(array[j+1:], i - (j + 1))
+
+#print(RSelect(arr, 12))
+
+
 
 
 
