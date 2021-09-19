@@ -5,15 +5,15 @@
 from collections import defaultdict, deque
 
 graph = {
-    1: ['4'],
-    2: ['8'],
-    3: ['6'],
-    4: ['7'],
-    5: ['2'],
-    6: ['9'],
-    7: ['1'],
-    8: ['5', '6'],
-    9: ['7', '3']
+    1: [4],
+    2: [8],
+    3: [6],
+    4: [7],
+    5: [2],
+    6: [9],
+    7: [1],
+    8: [5, 6],
+    9: [7, 3]
 }
 
 #the 5 biggest strongly connected components sizes should be: 3,3,3,0,0
@@ -35,10 +35,14 @@ def DFS_Iterative(graph, s):
         if explored[v] == "unexplored":
             explored[v] = "explored"
             for w in graph[v]:
-                stack.append(int(w))
+                stack.append(w)
+    
+    #print(explored)
+
+#DFS_Iterative(graph, 1)
 
 
-#1) RECURSIVE VERSION
+#2) RECURSIVE VERSION
 
 #mark all vertices as unexpored outside first recursive call
 vertex_list = list(graph)
@@ -50,14 +54,54 @@ def DFS_Recursive(graph, s):
     explored[s] = "explored"
 
     for v in graph[s]:
-        v = int(v)
         if explored[v] == "unexplored":
             DFS_Recursive(graph, v)
 
 
-#DFS_Iterative(graph, 2)
-#DFS_Recursive(graph, 7)
+#DFS_Recursive(graph, 8)
 #print(explored)
+
+
+
+
+
+# KOSARAJU ALGORITHM IMPLEMENTATION
+
+#first need a totsort algorithm 
+position = {}
+f = [len(vertex_list)]
+
+def TopoSort(graph):
+    vertex_list = list(graph)
+    explored = {}
+    
+    for i in vertex_list:
+        explored[i] = "unexplored"
+    print(explored)
+
+    for v in graph:
+        if explored[v] == "unexplored":
+            DFS_Topo(graph, v)
+
+def DFS_Topo(graph, s):
+    explored[s] = "explored"
+
+    for v in graph[s]:
+        if explored[v] == "unexplored":
+            DFS_Topo(graph, v)
+    position[s] = f[0]
+    f[0] = f[0] - 1
+    print(f[0])
+    
+    
+
+
+
+
+TopoSort(graph)
+print(explored)
+print(position)
+
 
 
     
