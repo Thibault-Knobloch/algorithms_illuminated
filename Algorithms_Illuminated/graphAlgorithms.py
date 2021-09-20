@@ -70,13 +70,13 @@ def DFS_Recursive(graph, s):
 #first need a totsort algorithm 
 position = {}
 f = [len(vertex_list)]
+explored = {}
+for i in vertex_list:
+    explored[i] = "unexplored"
 
 def TopoSort(graph):
     vertex_list = list(graph)
-    explored = {}
     
-    for i in vertex_list:
-        explored[i] = "unexplored"
     print(explored)
 
     for v in graph:
@@ -89,15 +89,13 @@ def DFS_Topo(graph, s):
     for v in graph[s]:
         if explored[v] == "unexplored":
             DFS_Topo(graph, v)
+    print("Recursive call done with vertex: ", s)
+    print(explored)
     position[s] = f[0]
     f[0] = f[0] - 1
-    print(f[0])
+    print(position)
     
     
-
-
-
-
 TopoSort(graph)
 print(explored)
 print(position)
