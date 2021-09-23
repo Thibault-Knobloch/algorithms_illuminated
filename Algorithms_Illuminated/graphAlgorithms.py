@@ -1,10 +1,8 @@
-#KOSARAJU algorithm implementation
-
-#example of directed graph
+# GRPOH ALGORITHMS - ALGORITHMS ILLUMINATED PART 2
 
 from collections import defaultdict, deque
 
-graph = {
+graph_input = {
     1: [4],
     2: [8],
     3: [6],
@@ -16,7 +14,7 @@ graph = {
     9: [7, 3]
 }
 
-graph_out = {
+graph_out_input = {
     1: [7],
     2: [5],
     3: [9],
@@ -27,6 +25,7 @@ graph_out = {
     8: [2],
     9: [6]
 }
+
 
 #IMPLEMENTATION OF DEPTH FIRST SEARCH
 
@@ -47,33 +46,22 @@ def DFS_Iterative(graph, s):
             for w in graph[v]:
                 stack.append(w)
     
-    #print(explored)
-
-#DFS_Iterative(graph, 1)
+    return explored
 
 
 #2) RECURSIVE VERSION
-
-#mark all vertices as unexpored outside first recursive call
-vertex_list = list(graph)
+vertex_list = list(graph_input)
 explored = {}
 for i in vertex_list:
     explored[i] = "unexplored"
 
 def DFS_Recursive(graph, s):
     explored[s] = "explored"
-
     for v in graph[s]:
         if explored[v] == "unexplored":
             DFS_Recursive(graph, v)
 
-
-#DFS_Recursive(graph, 8)
-#print(explored)
-
-
-
-# PROBLEM: Finding the 5 biggest strongly connected components in a directed graph
+    return explored
 
 
 # KOSARAJU ALGORITHM IMPLEMENTATION
@@ -84,52 +72,56 @@ explored = {}
 for i in vertex_list:
     explored[i] = "unexplored"
 
-vertex_list = list(graph_out)
+vertex_list = list(graph_input)
 position = {}
 f = [len(vertex_list)]
 
-def TopoSort_reversed(graph_out):
-    for v in graph_out:
+def TopoSort_reversed(graph, graph_out):
+    for v in graph:
         if explored[v] == "unexplored":
-            DFS_Topo(graph_out, v)
+            DFS_Topo_reversed(graph, graph_out, v)
     
     return position
 
 def DFS_Topo(graph, s):
     explored[s] = "explored"
-
     for v in graph[s]:
         if explored[v] == "unexplored":
             DFS_Topo(graph, v)
     position[s] = f[0]
     f[0] = f[0] - 1
 
-def DFS_Topo_reversed(graph_out, s):
+def DFS_Topo_reversed(graph, graph_out, s):
     explored[s] = "explored"
 
     for v in graph_out[s]:
         if explored[v] == "unexplored":
-            DFS_Topo_reversed(graph_out, v)
+            DFS_Topo_reversed(graph, graph_out, v)
     position[s] = f[0]
     f[0] = f[0] - 1
 
 #Kosaraju algorithm 
 scc = {}
+scc_sizes = []
 explored2 = {}
-vertex_list = list(graph)
+vertex_list = list(graph_input)
 for i in vertex_list:
     explored2[i] = "unexplored"
 
 def Kosaraju(graph, graph_out):
-    position = TopoSort_reversed(graph_out)
+    position = TopoSort_reversed(graph, graph_out)
     
     numSCC = 0
     for v in position:
         if explored2[v] == "unexplored":
             numSCC += 1
             DFS_SCC(graph, v, numSCC, 0)
-        
-    return scc
+            scc_sizes.append((len(scc) - sum(scc_sizes)))
+    
+    if len(scc_sizes) < 5:
+        for i in range(len(scc_sizes), 5):
+            scc_sizes.append(0)
+    return scc, sorted(scc_sizes, reverse=True)
 
 def DFS_SCC(graph, s, numSCC, size):
     explored2[s] = "explored"
@@ -139,22 +131,7 @@ def DFS_SCC(graph, s, numSCC, size):
     for v in graph[s]:
         if explored2[v] == "unexplored":
             DFS_SCC(graph, v, numSCC, size)
-    
-print(Kosaraju(graph, graph_out)) #returns dict with all vertexes and their corresponding SCC number
 
-
-
-
-    
-
-
-    
-
-
-    
-
-
-
-
-
-
+# PROBLEM: Finding the 5 biggest strongly connected components in a directed graph
+# ANSWER: with example graph provided should be 3,3,3,0,0
+print(Kosaraju(graph_input, graph_out_input)) #returns dict with all vertexes and their corresponding SCC number and size of 5 biggest SCC
