@@ -28,8 +28,6 @@ graph_out = {
     9: [6]
 }
 
-#the 5 biggest strongly connected components sizes should be: 3,3,3,0,0
-
 #IMPLEMENTATION OF DEPTH FIRST SEARCH
 
 #1) ITERATIVE VERSION
@@ -75,23 +73,25 @@ def DFS_Recursive(graph, s):
 
 
 
+# PROBLEM: Finding the 5 biggest strongly connected components in a directed graph
 
 
 # KOSARAJU ALGORITHM IMPLEMENTATION
-
-#first need a totsort algorithm 
+#global variables initialization
 position = {}
 f = [len(vertex_list)]
 explored = {}
 for i in vertex_list:
     explored[i] = "unexplored"
 
-def TopoSort(graph):
-    vertex_list = list(graph)
-    
-    for v in graph:
+vertex_list = list(graph_out)
+position = {}
+f = [len(vertex_list)]
+
+def TopoSort_reversed(graph_out):
+    for v in graph_out:
         if explored[v] == "unexplored":
-            DFS_Topo(graph, v)
+            DFS_Topo(graph_out, v)
     
     return position
 
@@ -103,25 +103,6 @@ def DFS_Topo(graph, s):
             DFS_Topo(graph, v)
     position[s] = f[0]
     f[0] = f[0] - 1
-    
-
-#print(TopoSort(graph))
-
-vertex_list = list(graph_out)
-explored = {}
-for i in vertex_list:
-    explored[i] = "unexplored"
-position = {}
-f = [len(vertex_list)]
-
-
-def TopoSort_reversed(graph_out):
-    
-    for v in graph_out:
-        if explored[v] == "unexplored":
-            DFS_Topo(graph_out, v)
-    
-    return position
 
 def DFS_Topo_reversed(graph_out, s):
     explored[s] = "explored"
@@ -131,9 +112,6 @@ def DFS_Topo_reversed(graph_out, s):
             DFS_Topo_reversed(graph_out, v)
     position[s] = f[0]
     f[0] = f[0] - 1
-
-print("TopoSort: ", TopoSort_reversed(graph_out))
-
 
 #Kosaraju algorithm 
 scc = {}
@@ -149,25 +127,25 @@ def Kosaraju(graph, graph_out):
     for v in position:
         if explored2[v] == "unexplored":
             numSCC += 1
-            DFS_SCC(graph, v, numSCC)
-    
-    for i in range(numSCC):
-        num = i + 1
-        for v in vertex_list:
-            if scc[v] == num:
-                print("SCC number ", num, " ", v)
+            DFS_SCC(graph, v, numSCC, 0)
         
     return scc
 
-def DFS_SCC(graph, s, numSCC):
+def DFS_SCC(graph, s, numSCC, size):
     explored2[s] = "explored"
     scc[s] = numSCC
+    size += 1
 
     for v in graph[s]:
         if explored2[v] == "unexplored":
-            DFS_SCC(graph, v, numSCC)
+            DFS_SCC(graph, v, numSCC, size)
+    
+print(Kosaraju(graph, graph_out)) #returns dict with all vertexes and their corresponding SCC number
 
-print(Kosaraju(graph, graph_out))
+
+
+
+    
 
 
     
