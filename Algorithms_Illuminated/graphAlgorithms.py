@@ -134,4 +134,33 @@ def DFS_SCC(graph, s, numSCC, size):
 
 # PROBLEM: Finding the 5 biggest strongly connected components in a directed graph
 # ANSWER: with example graph provided should be 3,3,3,0,0
-print(Kosaraju(graph_input, graph_out_input)) #returns dict with all vertexes and their corresponding SCC number and size of 5 biggest SCC
+#print(Kosaraju(graph_input, graph_out_input)) #returns dict with all vertexes and their corresponding SCC number and size of 5 biggest SCC
+
+
+# DIJKSTRA SHORTEST-PATH ALGORITHM
+
+example_graph = {
+    1: [[2, 3], [1, 4]],
+    2: [[3, 4], [2, 6]],
+    3: [[4], [3]],
+    4: [[], []]
+}
+
+shortest_path_lengths = {}
+
+print(shortest_path_lengths)
+
+def Dijkstra(graph, s):
+    visited_set = {s}
+    
+    for i in example_graph:
+        shortest_path_lengths[i] = None
+    shortest_path_lengths[s] = 0
+
+    #condition: there is an edge (v, w) such that v is in visited_set and w is not in visited_set
+    #maybe create a list that satisfies these conditions, the do the work inside the loop and recreate the list again in next iteration
+
+
+Dijkstra(example_graph, 2)
+print(shortest_path_lengths)
+
