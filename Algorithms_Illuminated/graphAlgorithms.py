@@ -148,14 +148,34 @@ example_graph = {
 
 shortest_path_lengths = {}
 
-print(shortest_path_lengths)
-
 def Dijkstra(graph, s):
-    visited_set = {s}
-    
+    visited_list = [s]
+
     for i in example_graph:
         shortest_path_lengths[i] = None
     shortest_path_lengths[s] = 0
+    
+    possible_next_w = []
+    for i in visited_list:
+        for w in example_graph[s][0]:
+            if w not in visited_list:
+                possible_next_w.append(w)
+    while possible_next_w:
+        for edge in possible_next_w:
+            visited_list.append(edge)
+            # get length: shortest_path(v) + l(v-w)
+        
+        #add shortest_path(w) being the minimum of the lengths found above
+        
+        possible_next_w = []
+        for a in visited_list:
+            for w in example_graph[a][0]:
+                if w not in visited_list:
+                    possible_next_w.append(w)
+    
+    
+    print(possible_next_w)
+    
 
     #condition: there is an edge (v, w) such that v is in visited_set and w is not in visited_set
     #maybe create a list that satisfies these conditions, the do the work inside the loop and recreate the list again in next iteration
@@ -163,4 +183,3 @@ def Dijkstra(graph, s):
 
 Dijkstra(example_graph, 2)
 print(shortest_path_lengths)
-
