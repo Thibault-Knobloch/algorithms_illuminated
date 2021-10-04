@@ -140,11 +140,13 @@ def DFS_SCC(graph, s, numSCC, size):
 # DIJKSTRA SHORTEST-PATH ALGORITHM
 
 example_graph = {
-    1: [[2, 3], [1, 4]],
-    2: [[3, 4], [2, 6]],
-    3: [[4], [3]],
-    4: [[], []]
+    1: [(2, 1), (3, 4)],
+    2: [(3, 2), (4, 6)],
+    3: [(4, 3)],
+    4: [()]
 }
+
+print(example_graph)
 
 shortest_path_lengths = {}
 
@@ -155,31 +157,42 @@ def Dijkstra(graph, s):
         shortest_path_lengths[i] = None
     shortest_path_lengths[s] = 0
     
-    possible_next_w = []
+    possible_next_edge = {}
     for i in visited_list:
-        for w in example_graph[s][0]:
-            if w not in visited_list:
-                possible_next_w.append(w)
-    while possible_next_w:
-        for edge in possible_next_w:
-            visited_list.append(edge)
-            # get length: shortest_path(v) + l(v-w)
-        
-        #add shortest_path(w) being the minimum of the lengths found above
-        
-        possible_next_w = []
-        for a in visited_list:
-            for w in example_graph[a][0]:
-                if w not in visited_list:
-                    possible_next_w.append(w)
-    
-    
-    print(possible_next_w)
-    
+        for w in example_graph[s]:
+            if w[0] not in visited_list:
+                if i in possible_next_edge:
+                    possible_next_edge[i] = [possible_next_edge[i], w[0]]
+                else:
+                    possible_next_edge[i] = w[0]
 
-    #condition: there is an edge (v, w) such that v is in visited_set and w is not in visited_set
-    #maybe create a list that satisfies these conditions, the do the work inside the loop and recreate the list again in next iteration
+    while possible_next_edge:
+        length = {}
+        for edge in possible_next_edge:
+            i = 0
+            if isinstance(possible_next_edge[edge], int) == True:
+                length[possible_next_edge[edge]] = shortest_path_lengths[edge] + example_graph[edge][i][1]
+                i += 1
+            else:
+                for v in possible_next_edge[edge]:
+                    length[v] = shortest_path_lengths[edge] + example_graph[edge][i][1]
+                    i += 1
+            
+        best_length = min(length, key=length.get)
+
+        visited_list.append(best_length)
+        shortest_path_lengths[best_length] = length[best_length]
+                
+        possible_next_edge = {}
+        for i in visited_list:
+            for w in example_graph[i]:
+                if len(w) != 0:
+                    if w[0] not in visited_list:
+                        if i in possible_next_edge:
+                            possible_next_edge[i] = [possible_next_edge[i], w[0]]
+                        else:
+                            possible_next_edge[i] = w[0]    
 
 
-Dijkstra(example_graph, 2)
+Dijkstra(example_graph, 1)
 print(shortest_path_lengths)
